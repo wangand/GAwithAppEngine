@@ -28,10 +28,53 @@ from apiclient.discovery import build
 from google.appengine.ext import webapp
 from oauth2client.appengine import OAuth2DecoratorFromClientSecrets
 
+decorator = OAuth2DecoratorFromClientSecrets(
+  os.path.join(os.path.dirname(__file__), 'client_secret.json'),
+  'https://www.googleapis.com/auth/analytics.readonly')
+
+service = build('analytics', 'v3')
+
+import jinja2
+JINJA_ENVIRONMENT = jinja2.Environment(loader=jinja2.FileSystemLoader(os.path.dirname(__file__)), autoescape=True, extensions=['jinja2.ext.autoescape'])
+
+
 class MainHandler(webapp2.RequestHandler):
+    @decorator.oauth_required
     def get(self):
-        self.response.write('Hello Imported Files!')
+        """
+        http = decorator.http()
+
+        report = service.data().ga().get(
+          ids='ga:%s'%self.request.get("viewId"),
+          metrics='ga:sessions',
+          dimensions='ga:hour,ga:dayOfWeek',
+          start_date='2014-12-01',
+          end_date='2014-12-07').execute(http)
+
+        cleanedData = []
+        for row in report['rows']:
+        rowDictionary = {"day":int(row[1])+1, "hour":int(row[0]) + 1, "value":int(row[2])}
+        cleanedData.append(rowDictionary)
+        """
+        # If sample is in the url, use sample data
+        if self.request.get("sample"):
+            val1 = 1
+        # Otherwise use the GA data
+        else:
+            val1 = 10
+        cleanedData = [{"day":3, "hour":1, "value":val1}, {"day":1, "hour":2, "value":13}]
+        template = JINJA_ENVIRONMENT.get_template('index.html')
+        self.response.write(template.render({'cleanedData':cleanedData}))
+
+class InputHandler(webapp2.RequestHandler):
+    @decorator.oauth_required
+    def get(self):
+        template = JINJA_ENVIRONMENT.get_template('input.html')
+        self.response.write(template.render())
 
 app = webapp2.WSGIApplication([
-    ('/', MainHandler)
+    ('/', MainHandler),
+    ('/results', MainHandler),
+    ('/input', InputHandler),
+    (decorator.callback_path, decorator.callback_handler())
 ], debug=True)
