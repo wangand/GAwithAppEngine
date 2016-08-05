@@ -74,9 +74,16 @@ class InputHandler(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('input.html')
         self.response.write(template.render())
 
+class VegaTest(webapp2.RequestHandler):
+    @decorator.oauth_required
+    def get(self):
+    	template = JINJA_ENVIRONMENT.get_template('vegatest.html')
+        self.response.write(template.render())
+
 app = webapp2.WSGIApplication([
     ('/', InputHandler),
     ('/results', MainHandler),
     ('/input', InputHandler),
+    ('/vegatest', VegaTest),
     (decorator.callback_path, decorator.callback_handler())
 ], debug=True)
