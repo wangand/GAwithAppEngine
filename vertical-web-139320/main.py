@@ -41,28 +41,30 @@ JINJA_ENVIRONMENT = jinja2.Environment(loader=jinja2.FileSystemLoader(os.path.di
 class MainHandler(webapp2.RequestHandler):
     @decorator.oauth_required
     def get(self):
-        """
-        http = decorator.http()
-
-        report = service.data().ga().get(
-          ids='ga:%s'%self.request.get("viewId"),
-          metrics='ga:sessions',
-          dimensions='ga:hour,ga:dayOfWeek',
-          start_date='2014-12-01',
-          end_date='2014-12-07').execute(http)
-
-        cleanedData = []
-        for row in report['rows']:
-        rowDictionary = {"day":int(row[1])+1, "hour":int(row[0]) + 1, "value":int(row[2])}
-        cleanedData.append(rowDictionary)
-        """
         # If sample is in the url, use sample data
         if self.request.get("sample"):
             val1 = 1
+            cleanedData = [{"day":3, "hour":1, "value":val1}, {"day":1, "hour":2, "value":13}]
         # Otherwise use the GA data
+        elif self.request.get("viewId"):
+            http = decorator.http()
+
+            report = service.data().ga().get(
+              ids='ga:%s'%self.request.get("viewId"),
+              metrics='ga:sessions',
+              dimensions='ga:hour,ga:dayOfWeek',
+              start_date='2014-12-01',
+              end_date='2014-12-07').execute(http)
+
+            cleanedData = []
+            for row in report['rows']:
+                rowDictionary = {"day":int(row[1])+1, "hour":int(row[0]) + 1, "value":int(row[2])}
+                cleanedData.append(rowDictionary)
+           
+        # Neither sample requested nor viewId sent
         else:
-            val1 = 10
-        cleanedData = [{"day":3, "hour":1, "value":val1}, {"day":1, "hour":2, "value":13}]
+            cleanedData = []
+        
         template = JINJA_ENVIRONMENT.get_template('index.html')
         self.response.write(template.render({'cleanedData':cleanedData}))
 
@@ -73,7 +75,7 @@ class InputHandler(webapp2.RequestHandler):
         self.response.write(template.render())
 
 app = webapp2.WSGIApplication([
-    ('/', MainHandler),
+    ('/', InputHandler),
     ('/results', MainHandler),
     ('/input', InputHandler),
     (decorator.callback_path, decorator.callback_handler())

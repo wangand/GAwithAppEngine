@@ -16,5 +16,21 @@
 
     <h1>GA data visualization</h1>
     <h2>Visualize your GA data</h2>
+    view id:
+    <input type="text" id="viewId" value="126914736"></input>
+    <input type="button" value="view GA data" onclick="viewData()"></input>
+
+    <script>
+      viewData = function(){
+        viewId = document.getElementById("viewId");
+        if(viewId.value === ""){
+          alert("need view id");
+        }
+        else{
+          window.location = "results?viewId="+viewId.value;
+          console.log("redirect failed");
+        }
+      };
+    </script>
   </body>
 </html>
