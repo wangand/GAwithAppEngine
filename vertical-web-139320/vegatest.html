@@ -1,12 +1,184 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
-<html>
-  <head>
-    <style>
-    </style>
-  </head>
-  <body>
-    <script src="vega.min.js"></script>
-    <h1>Vega visualization goes here</h1>
-  </body>
+<head>
+  <title>Vega Embedded Bar Chart</title>
+  <meta charset="utf-8">
+
+  <script src="http://vega.github.io/vega-editor/vendor/d3.min.js" charset="utf-8"></script>
+  <script src="http://vega.github.io/vega-editor/vendor/vega.js" charset="utf-8"></script>
+  <script src="http://vega.github.io/vega-editor/vendor/vega-embed.js" charset="utf-8"></script>
+</head>
+<body>
+  <!-- Container for the visualization -->
+  <div id="vis"></div>
+
+  <script>
+  // Assign the specification to a local variable vlSpec.
+  /*
+  var vlSpec = 
+{
+  "width": 400,
+  "height": 200,
+  "padding": {"top": 10, "left": 30, "bottom": 20, "right": 10},
+
+  "data": [
+    {
+      "name": "table",
+      "values": [
+        {"category":"A", "amount":28},
+        {"category":"B", "amount":55},
+        {"category":"C", "amount":43},
+        {"category":"D", "amount":91},
+        {"category":"E", "amount":81},
+        {"category":"F", "amount":53},
+        {"category":"G", "amount":19},
+        {"category":"H", "amount":87},
+        {"category":"I", "amount":52}
+      ]
+    }
+  ],
+
+  "signals": [
+    {
+      "name": "tooltip",
+      "init": {},
+      "streams": [
+        {"type": "rect:mouseover", "expr": "datum"},
+        {"type": "rect:mouseout", "expr": "{}"}
+      ]
+    }
+  ],
+
+  "predicates": [
+    {
+      "name": "tooltip", "type": "==", 
+      "operands": [{"signal": "tooltip._id"}, {"arg": "id"}]
+    }
+  ],
+
+  "scales": [
+    { "name": "xscale", "type": "ordinal", "range": "width",
+      "domain": {"data": "table", "field": "category"} },
+    { "name": "yscale", "range": "height", "nice": true,
+      "domain": {"data": "table", "field": "amount"} }
+  ],
+
+  "axes": [
+    { "type": "x", "scale": "xscale" },
+    { "type": "y", "scale": "yscale" }
+  ],
+
+  "marks": [
+    {
+      "type": "rect",
+      "from": {"data":"table"},
+      "properties": {
+        "enter": {
+          "x": {"scale": "xscale", "field": "category"},
+          "width": {"scale": "xscale", "band": true, "offset": -1},
+          "y": {"scale": "yscale", "field": "amount"},
+          "y2": {"scale": "yscale", "value":0}
+        },
+        "update": { "fill": {"value": "steelblue"} },
+        "hover": { "fill": {"value": "red"} }
+      }
+    },
+    {
+      "type": "text",
+      "properties": {
+        "enter": {
+          "align": {"value": "center"},
+          "fill": {"value": "#333"}
+        },
+        "update": {
+          "x": {"scale": "xscale", "signal": "tooltip.category"},
+          "dx": {"scale": "xscale", "band": true, "mult": 0.5},
+          "y": {"scale": "yscale", "signal": "tooltip.amount", "offset": -5},
+          "text": {"signal": "tooltip.amount"},
+          "fillOpacity": {
+            "rule": [
+              {
+                "predicate": {"name": "tooltip", "id": {"value": null}},
+                "value": 0
+              },
+              {"value": 1}
+            ]
+          }
+        }
+      }
+    }
+  ]
+};
+*/
+
+var vlSpec = 
+{
+  "width": 800,
+  "height": 500,
+
+  "data": [
+    {
+      "name": "temperature",
+      "url": "data/seattle-temps.csv",
+      "format": {"type": "csv", "parse": {"temp": "number", "date": "date"}},
+      "transform": [
+        {"type": "formula", "field": "hour", "expr": "hours(datum.date)"},
+        { "type": "formula", "field": "date",
+          "expr": "datetime(year(datum.date), month(datum.date), date(datum.date))"}
+      ]
+    }
+  ],
+
+  "scales": [
+    {
+      "name": "x",
+      "type": "time",
+      "domain": {"data": "temperature", "field": "date"},
+      "range": "width"
+    }, {
+      "name": "y",
+      "type": "ordinal",
+      "domain": {"data": "temperature", "field": "hour"},
+      "range": "height",
+      "round": false
+    }, {
+      "name": "c",
+      "type": "linear",
+      "domain": [37.5, 41.3, 45.1, 48.9, 52.7, 56.5, 60.3, 64.1, 67.9, 71.7, 75.5],
+      "range": ["#313695", "#4575b4", "#74add1", "#abd9e9", "#e0f3f8", "#ffffbf", "#fee090", "#fdae61", "#f46d43", "#d73027", "#a50026"],
+      "zero": false
+    }
+  ],
+
+  "axes": [
+    {"type": "x", "scale": "x"},
+    {"type": "y", "scale": "y"}
+  ],
+
+  "legends": [{"fill": "c", "values": [37.5, 56.5, 75.5]}],
+
+  "marks": [
+    {
+      "type": "rect",
+      "from": {"data": "temperature"},
+      "properties": {
+        "enter": {
+          "x": {"scale": "x", "field": "date"},
+          "width": {"value": 5},
+          "y": {"scale": "y", "field": "hour"},
+          "height": {"scale": "y", "band": true},
+          "fill": {"scale": "c", "field": "temp"}
+        }
+      }
+    }
+  ]
+};
+
+
+  // Embed the visualization in the container with id `vis`
+  vg.embed("#vis", vlSpec, function(error, result) {
+    // Callback receiving the View instance and parsed Vega spec
+    // result.view is the View, which resides under the '#vis' element
+  });
+  </script>
+</body>
 </html>

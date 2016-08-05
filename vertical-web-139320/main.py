@@ -54,7 +54,7 @@ class MainHandler(webapp2.RequestHandler):
               metrics='ga:sessions',
               dimensions='ga:hour,ga:dayOfWeek',
               start_date='2014-12-01',
-              end_date='2014-12-07').execute(http)
+              end_date='2015-12-07').execute(http)
 
             cleanedData = []
             for row in report['rows']:
