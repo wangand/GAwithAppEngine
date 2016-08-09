@@ -78,7 +78,18 @@ class VegaTest(webapp2.RequestHandler):
     @decorator.oauth_required
     def get(self):
     	template = JINJA_ENVIRONMENT.get_template('vegatest.html')
-        self.response.write(template.render())
+        cleanedData = [
+          {"temp":41.1, "date":"2010/01/01 07:00"},
+          {"temp":42.0, "date":"2010/01/01 18:00"},
+          {"temp":43.0, "date":"2010/06/11 17:00"},
+          {"temp":44.0, "date":"2010/06/12 00:00"},
+          {"temp":45.0, "date":"2010/06/14 05:00"},
+          {"temp":46.0, "date":"2010/06/22 04:00"},
+          {"temp":47.2, "date":"2010/06/27 17:00"},
+          {"temp":38.0, "date":"2010/09/28 21:00"},
+          {"temp":29.3, "date":"2010/12/03 01:00"}
+        ]
+        self.response.write(template.render({'cleanedData':cleanedData}))
 
 app = webapp2.WSGIApplication([
     ('/', InputHandler),

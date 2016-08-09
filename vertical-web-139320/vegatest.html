@@ -13,6 +13,8 @@
 
   <script>
   // Assign the specification to a local variable vlSpec.
+  
+  // Simple Bar graph
   /*
   var vlSpec = 
 {
@@ -110,6 +112,8 @@
 };
 */
 
+// Heat map with data from imported csv from url
+/*
 var vlSpec = 
 {
   "width": 800,
@@ -173,6 +177,184 @@ var vlSpec =
   ]
 };
 
+
+// Heat map with hardcoded or passed values (from main.py)
+var vlSpec = 
+{
+  "width": 800,
+  "height": 500,
+
+  "data": [
+    {
+      "name": "temperature",
+      //"url": "data/seattle-temps.csv",
+      //"format": {"type": "csv", "parse": {"temp": "number", "date": "date"}},
+       "values": [
+          {"temp":41.1, "date":"2010/01/01 07:00"},
+          {"temp":42.0, "date":"2010/01/01 18:00"},
+          {"temp":43.0, "date":"2010/06/11 17:00"},
+          {"temp":44.0, "date":"2010/06/12 00:00"},
+          {"temp":45.0, "date":"2010/06/14 05:00"},
+          {"temp":46.0, "date":"2010/06/22 04:00"},
+          {"temp":47.2, "date":"2010/06/27 17:00"},
+          {"temp":38.0, "date":"2010/09/28 21:00"},
+          {"temp":29.3, "date":"2010/12/03 01:00"}
+        ],
+      //"values": {{cleanedData|safe}},
+      "transform": [
+        {"type": "formula", "field": "hour", "expr": "hours(datum.date)"},
+        { "type": "formula", "field": "date",
+          "expr": "datetime(year(datum.date), month(datum.date), date(datum.date))"}
+      ]
+    }
+  ],
+
+  "scales": [
+    {
+      "name": "x",
+      "type": "time",
+      "domain": {"data": "temperature", "field": "date"},
+      "range": "width"
+    }, {
+      "name": "y",
+      "type": "ordinal",
+      "domain": {"data": "temperature", "field": "hour"},
+      "range": "height",
+      "round": false
+    }, {
+      "name": "c",
+      "type": "linear",
+      "domain": [37.5, 41.3, 45.1, 48.9, 52.7, 56.5, 60.3, 64.1, 67.9, 71.7, 75.5],
+      "range": ["#313695", "#4575b4", "#74add1", "#abd9e9", "#e0f3f8", "#ffffbf", "#fee090", "#fdae61", "#f46d43", "#d73027", "#a50026"],
+      "zero": false
+    }
+  ],
+
+  "axes": [
+    {"type": "x", "scale": "x"},
+    {"type": "y", "scale": "y"}
+  ],
+
+  "legends": [{"fill": "c", "values": [37.5, 56.5, 75.5]}],
+
+  "marks": [
+    {
+      "type": "rect",
+      "from": {"data": "temperature"},
+      "properties": {
+        "enter": {
+          "x": {"scale": "x", "field": "date"},
+          "width": {"value": 5},
+          "y": {"scale": "y", "field": "hour"},
+          "height": {"scale": "y", "band": true},
+          "fill": {"scale": "c", "field": "temp"}
+        }
+      }
+    }
+  ]
+};
+*/
+
+var daysOfWeek = [ "Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
+
+// Heat map with same values as d3js visualization
+var vlSpec = 
+{
+  "width": 800,
+  "height": 500,
+
+  "data": [
+    {
+      "name": "sessions",
+       "values": [
+         {"day":3, "hour":1, "value":2},
+         {"day":3, "hour":2, "value":7},
+         {"day":4, "hour":6, "value":14},
+         {"day":5, "hour":3, "value":23},
+         {"day":6, "hour":5, "value":1},
+         {"day":1, "hour":3, "value":5},
+         {"day":1, "hour":7, "value":55},
+         {"day":1, "hour":10, "value":7},
+         {"day":2, "hour":7, "value":2}
+
+       ]
+      //"values": {{cleanedData|safe}}
+    }
+  ],
+
+  "scales": [
+    {
+      "name": "x",
+      "type": "ordinal",
+      "domain": {"data": "sessions", "field": "hour"},
+      "range": "width"
+    }, {
+      "name": "y",
+      "type": "ordinal",
+      "domain": {"data": "sessions", "field": "day"},
+      "range": "height",
+      "round": false
+    }, {
+      "name": "c",
+      "type": "linear",
+      //"domain": {"data": "sessions", "field": "value"},
+      "domain": [0,5,10,15,20,25,30,35,40,45],
+      "range": ["#ffffd9","#edf8b1","#c7e9b4","#7fcdbb","#41b6c4","#1d91c0","#225ea8","#253494","#081d58"],
+      "zero": false
+    },
+    {
+      "name": "ylabels",
+      "type": "ordinal",
+      "domain": [1,2,3,4,5,6,7],
+      "range": [ "Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]
+    },
+    {
+      "name": "clabels",
+      "type": "ordinal",
+      "domain": [1,3,5,7,9],
+      "range": ["#ffffd9","#c7e9b4","#41b6c4","#225ea8","#081d58"]
+    }
+  ],
+
+  "axes": [
+    {"type": "x", "scale": "x"},
+    {
+      "type": "y",
+      "scale": "y",
+      "properties": {
+        "labels": {
+           "text": {"scale": "ylabels"},
+           "fontSize": {"value": 14},
+           "align": {"value": "right"},
+           //"text": {"template": "{{ '{{' }}datum.data{{ '}}' }} trillion"}
+         }
+       }
+    }
+  ],
+
+  "legends": [
+    {
+      "fill": "c", 
+      "values": [0,10,20,30,40, 50]
+    }
+  ],
+
+  "marks": [
+    {
+      "type": "rect",
+      "from": {"data": "sessions"},
+      "properties": {
+        "enter": {
+          "x": {"scale": "x", "field": "day"},
+          "width": {"scale": "x", "band": true},
+          "y": {"scale": "y", "field": "hour"},
+          "height": {"scale": "y", "band": true},
+          "fill": {"scale": "c", "field": "value"}
+        }
+      }
+    }
+  ]
+}
 
   // Embed the visualization in the container with id `vis`
   vg.embed("#vis", vlSpec, function(error, result) {
