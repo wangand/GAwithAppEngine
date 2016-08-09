@@ -37,14 +37,73 @@ service = build('analytics', 'v3')
 import jinja2
 JINJA_ENVIRONMENT = jinja2.Environment(loader=jinja2.FileSystemLoader(os.path.dirname(__file__)), autoescape=True, extensions=['jinja2.ext.autoescape'])
 
+testData0 = [
+    {"day":3, "hour":1, "value":2},
+    {"day":3, "hour":2, "value":7},
+    {"day":4, "hour":6, "value":14},
+    {"day":5, "hour":3, "value":23},
+    {"day":6, "hour":5, "value":1},
+    {"day":1, "hour":3, "value":5},
+    {"day":1, "hour":7, "value":55},
+    {"day":1, "hour":10, "value":7},
+    {"day":2, "hour":7, "value":2},
+    {"day":7, "hour":7, "value":2}
+]
+
+testData1 = [
+  {"day":1, "hour":1, "value":3}
+]
+
+testData2 = [
+  {"day":1, "hour":1, "value":3},
+  {"day":2, "hour":2, "value":25}
+]
+
+testData7 = [
+  {"day":1, "hour":1, "value":1},
+  {"day":2, "hour":1, "value":2},
+  {"day":3, "hour":1, "value":3},
+  {"day":4, "hour":1, "value":4},
+  {"day":5, "hour":1, "value":5},
+  {"day":6, "hour":1, "value":6},
+  {"day":7, "hour":1, "value":7},
+]
+
+testData7B = [
+  {"day":1, "hour":1, "value":1},
+  {"day":1, "hour":2, "value":2},
+  {"day":1, "hour":3, "value":3},
+  {"day":1, "hour":4, "value":4},
+  {"day":1, "hour":5, "value":5},
+  {"day":1, "hour":6, "value":6},
+  {"day":1, "hour":7, "value":7},
+]
+
+testData9 = [
+  {"day":1, "hour":1, "value":1},
+  {"day":1, "hour":2, "value":2},
+  {"day":1, "hour":3, "value":3},
+  {"day":1, "hour":4, "value":4},
+  {"day":1, "hour":5, "value":5},
+  {"day":1, "hour":6, "value":6},
+  {"day":1, "hour":7, "value":7},
+  {"day":1, "hour":8, "value":8},
+  {"day":1, "hour":9, "value":9}
+]
+
+################
+currentTest = testData7B
+################
 
 class MainHandler(webapp2.RequestHandler):
     @decorator.oauth_required
     def get(self):
         # If sample is in the url, use sample data
         if self.request.get("sample"):
-            val1 = 1
-            cleanedData = [{"day":3, "hour":1, "value":val1}, {"day":1, "hour":2, "value":13}]
+            #val1 = 1
+            #cleanedData = [{"day":3, "hour":1, "value":val1}, {"day":1, "hour":2, "value":13}]
+            cleanedData = currentTest
+
         # Otherwise use the GA data
         elif self.request.get("viewId"):
             http = decorator.http()
@@ -78,23 +137,20 @@ class VegaTest(webapp2.RequestHandler):
     @decorator.oauth_required
     def get(self):
     	template = JINJA_ENVIRONMENT.get_template('vegatest.html')
-        cleanedData = [
-          {"temp":41.1, "date":"2010/01/01 07:00"},
-          {"temp":42.0, "date":"2010/01/01 18:00"},
-          {"temp":43.0, "date":"2010/06/11 17:00"},
-          {"temp":44.0, "date":"2010/06/12 00:00"},
-          {"temp":45.0, "date":"2010/06/14 05:00"},
-          {"temp":46.0, "date":"2010/06/22 04:00"},
-          {"temp":47.2, "date":"2010/06/27 17:00"},
-          {"temp":38.0, "date":"2010/09/28 21:00"},
-          {"temp":29.3, "date":"2010/12/03 01:00"}
-        ]
+        cleanedData = currentTest
         self.response.write(template.render({'cleanedData':cleanedData}))
+
+class SideBySide(webapp2.RequestHandler):
+    @decorator.oauth_required
+    def get(self):
+        template = JINJA_ENVIRONMENT.get_template('sidebyside.html')
+        self.response.write(template.render())
 
 app = webapp2.WSGIApplication([
     ('/', InputHandler),
     ('/results', MainHandler),
     ('/input', InputHandler),
     ('/vegatest', VegaTest),
+    ('/sidebyside', SideBySide),
     (decorator.callback_path, decorator.callback_handler())
 ], debug=True)
