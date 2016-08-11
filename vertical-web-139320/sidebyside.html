@@ -21,12 +21,12 @@
 
     <script>
       var render = function(){
-      var index = document.getElementById("selector").value
-      var vegasrc = document.getElementById("vegaif");
-      var d3src = document.getElementById("d3if");
-      vegasrc.src = "vegatest?index="+index;
-      d3src = "results?index="+index;
-    }
+        var index = document.getElementById("selector").value
+        var vegasrc = document.getElementById("vegaif");
+        var d3src = document.getElementById("d3if");
+        vegasrc.src = "vegatest?index="+index;
+        d3src.src = "results?index="+index;
+      };
     </script>
 
   </body>

@@ -70,16 +70,6 @@ testData7 = [
   {"day":7, "hour":1, "value":7},
 ]
 
-testData7B = [
-  {"day":1, "hour":1, "value":1},
-  {"day":1, "hour":2, "value":2},
-  {"day":1, "hour":3, "value":3},
-  {"day":1, "hour":4, "value":4},
-  {"day":1, "hour":5, "value":5},
-  {"day":1, "hour":6, "value":6},
-  {"day":1, "hour":7, "value":7},
-]
-
 testData9 = [
   {"day":1, "hour":1, "value":1},
   {"day":1, "hour":2, "value":2},
@@ -92,37 +82,28 @@ testData9 = [
   {"day":1, "hour":9, "value":9}
 ]
 
-"""
-samples = {
+sampleIndex = 0 #default to 7 vertical
+samples =[
   {
-    "name": "7 vertical",
+    "name":"Just 1",
     "data": [
-      {"day":1, "hour":1, "value":1},
-      {"day":2, "hour":1, "value":2},
-      {"day":3, "hour":1, "value":3},
-      {"day":4, "hour":1, "value":4},
-      {"day":5, "hour":1, "value":5},
-      {"day":6, "hour":1, "value":6},
-      {"day":7, "hour":1, "value":7}
+        {"day":1, "hour":1, "value":3}
     ]
   },
   {
-    "name": "7 horizontal",
+    "name":"2 vertical",
     "data": [
-      {"day":1, "hour":1, "value":1},
-      {"day":1, "hour":2, "value":2},
-      {"day":1, "hour":3, "value":3},
-      {"day":1, "hour":4, "value":4},
-      {"day":1, "hour":5, "value":5},
-      {"day":1, "hour":6, "value":6},
-      {"day":1, "hour":7, "value":7}
+        {"day":1, "hour":1, "value":1},
+        {"day":2, "hour":2, "value":2}
     ]
-  }
-}
-"""
-
-sampleIndex = 0 #default to 7 vertical
-samples =[
+  },
+  {
+    "name":"2 horizontal",
+    "data": [
+        {"day":1, "hour":1, "value":1},
+        {"day":1, "hour":2, "value":2}
+    ]
+  },
   {
     "name":"7 vertical",
     "data": [
@@ -146,12 +127,22 @@ samples =[
       {"day":1, "hour":6, "value":6},
       {"day":1, "hour":7, "value":7}
     ]
+  },
+  {
+  "name":"9 horizontal",
+    "data": [
+      {"day":1, "hour":1, "value":1},
+      {"day":1, "hour":2, "value":2},
+      {"day":1, "hour":3, "value":3},
+      {"day":1, "hour":4, "value":4},
+      {"day":1, "hour":5, "value":5},
+      {"day":1, "hour":6, "value":6},
+      {"day":1, "hour":7, "value":7},
+      {"day":1, "hour":8, "value":8},
+      {"day":1, "hour":9, "value":9}
+    ]
   }
 ]
-
-################
-currentTest = testData7B
-################
 
 class MainHandler(webapp2.RequestHandler):
     @decorator.oauth_required
@@ -160,7 +151,8 @@ class MainHandler(webapp2.RequestHandler):
         if self.request.get("index"):
             #val1 = 1
             #cleanedData = [{"day":3, "hour":1, "value":val1}, {"day":1, "hour":2, "value":13}]
-            cleanedData = currentTest
+            sampleIndex = int(self.request.get("index"))
+            cleanedData = samples[sampleIndex]['data']
 
         # Otherwise use the GA data
         elif self.request.get("viewId"):
@@ -194,7 +186,10 @@ class InputHandler(webapp2.RequestHandler):
 class VegaTest(webapp2.RequestHandler):
     @decorator.oauth_required
     def get(self):
-    	template = JINJA_ENVIRONMENT.get_template('vegatest.html')
+        if self.request.get("index"):
+            sampleIndex = int(self.request.get("index"))
+
+        template = JINJA_ENVIRONMENT.get_template('vegatest.html')
         cleanedData = samples[sampleIndex]['data']
         self.response.write(template.render({'cleanedData':cleanedData}))
 
