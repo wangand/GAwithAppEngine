@@ -8,9 +8,26 @@
   </head>
   <body>
     <h1>Side by Side</h1>
-    <iframe src="results?sample=1" width="45%" height="500px"></iframe>
-    <iframe src="vegatest" width="45%" height="500px"></iframe>
+    <iframe id="d3if" src="results?index=0" width="45%" height="500px"></iframe>
+    <iframe id="vegaif" src="vegatest?index=0" width="45%" height="500px"></iframe>
 
-    
+    <br/>
+    <select id="selector">
+      {% for el in samples%}
+      <option value={{loop.index-1}}>{{el.name}}</option>
+      {% endfor %}
+    </select>
+    <input type="button" value="render" onclick="render()"></input>
+
+    <script>
+      var render = function(){
+      var index = document.getElementById("selector").value
+      var vegasrc = document.getElementById("vegaif");
+      var d3src = document.getElementById("d3if");
+      vegasrc.src = "vegatest?index="+index;
+      d3src = "results?index="+index;
+    }
+    </script>
+
   </body>
 </html>
