@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<html>
+  <head>
+    <style>
+    </style>
+    <title>Video Testing</title>
+    <script>
+      
+    </script>
+  </head>
+  <body>
+    <script id="container"></script>
+    <input type="text" id="containerId" value="GTM-MK2GL6"></input>
+    <input type="button" value="load preview" onclick="containerPreview()"></input>
+    <div id="cat" style="width:500px;">
+    <script src="http://content.jwplatform.com/players/3WsZNDQ8-7pVCTwdI.js"></script>
+    </div>
+
+    <div id="vimeoplayer" style="width:500px">
+    </div>
+
+    <div id="youtube" style="width:500px">
+    </div>
+
+  <script>
+  var containerPreview = function(){
+
+     //warning probably some sort of weird closure thing here
+     var customId = document.getElementById("containerId");
+
+    (function(w, d, s, l, i) {
+  w[l] = w[l] || [];
+  w[l].push({
+      'gtm.start': new Date().getTime(),
+      event: 'gtm.js'
+  });
+
+  var f = d.getElementsByTagName(s)[0]
+    , j = d.createElement(s)
+    , dl = l != 'dataLayer' ? '&l=' + l : '';
+  j.async = true;
+  j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+  f.parentNode.insertBefore(j, f);
+})(window, document, 'script', 'dataLayer', customId.value);
+  };
+
+  </script>
+
+  </body>
+</html>

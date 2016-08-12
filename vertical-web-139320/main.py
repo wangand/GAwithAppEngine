@@ -204,9 +204,14 @@ class VegaTest(webapp2.RequestHandler):
         if self.request.get("index"):
             sampleIndex = int(self.request.get("index"))
 
+        if self.request.get("spec"):
+            spec = self.request.get("spec")
+        else:
+            spec = "vlSpec"
+
         template = JINJA_ENVIRONMENT.get_template('vegatest.html')
         cleanedData = samples[sampleIndex]['data']
-        self.response.write(template.render({'cleanedData':cleanedData}))
+        self.response.write(template.render({'cleanedData':cleanedData, 'spec':spec}))
 
 class SideBySide(webapp2.RequestHandler):
     @decorator.oauth_required
@@ -214,11 +219,17 @@ class SideBySide(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('sidebyside.html')
         self.response.write(template.render({'samples':samples}))
 
+class VideoTesting(webapp2.RequestHandler):
+    def get(self):
+        template = JINJA_ENVIRONMENT.get_template('videotesting.html')
+        self.response.write(template.render())
+
 app = webapp2.WSGIApplication([
     ('/', InputHandler),
     ('/results', MainHandler),
     ('/input', InputHandler),
     ('/vegatest', VegaTest),
     ('/sidebyside', SideBySide),
+    ('/videotesting', VideoTesting),
     (decorator.callback_path, decorator.callback_handler())
 ], debug=True)
