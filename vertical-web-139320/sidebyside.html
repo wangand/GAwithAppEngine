@@ -12,12 +12,14 @@
     <iframe id="vegaif" src="vegatest?index=0" width="45%" height="500px"></iframe>
 
     <br/>
-    <select id="selector">
+    <div align="center">
+    <select id="selector" onchange="render()">
       {% for el in samples%}
       <option value={{loop.index-1}}>{{el.name}}</option>
       {% endfor %}
     </select>
     <input type="button" value="render" onclick="render()"></input>
+    </div>
 
     <script>
       var render = function(){

@@ -38,51 +38,7 @@ service = build('analytics', 'v3')
 import jinja2
 JINJA_ENVIRONMENT = jinja2.Environment(loader=jinja2.FileSystemLoader(os.path.dirname(__file__)), autoescape=True, extensions=['jinja2.ext.autoescape'])
 
-testData0 = [
-    {"day":3, "hour":1, "value":2},
-    {"day":3, "hour":2, "value":7},
-    {"day":4, "hour":6, "value":14},
-    {"day":5, "hour":3, "value":23},
-    {"day":6, "hour":5, "value":1},
-    {"day":1, "hour":3, "value":5},
-    {"day":1, "hour":7, "value":55},
-    {"day":1, "hour":10, "value":7},
-    {"day":2, "hour":7, "value":2},
-    {"day":7, "hour":7, "value":2}
-]
-
-testData1 = [
-  {"day":1, "hour":1, "value":3}
-]
-
-testData2 = [
-  {"day":1, "hour":1, "value":3},
-  {"day":2, "hour":2, "value":25}
-]
-
-testData7 = [
-  {"day":1, "hour":1, "value":1},
-  {"day":2, "hour":1, "value":2},
-  {"day":3, "hour":1, "value":3},
-  {"day":4, "hour":1, "value":4},
-  {"day":5, "hour":1, "value":5},
-  {"day":6, "hour":1, "value":6},
-  {"day":7, "hour":1, "value":7},
-]
-
-testData9 = [
-  {"day":1, "hour":1, "value":1},
-  {"day":1, "hour":2, "value":2},
-  {"day":1, "hour":3, "value":3},
-  {"day":1, "hour":4, "value":4},
-  {"day":1, "hour":5, "value":5},
-  {"day":1, "hour":6, "value":6},
-  {"day":1, "hour":7, "value":7},
-  {"day":1, "hour":8, "value":8},
-  {"day":1, "hour":9, "value":9}
-]
-
-sampleIndex = 0 #default to 7 vertical
+sampleIndex = 0 #default dataset to visualize in sidebyside
 samples =[
   {
     "name":"Just 1",
@@ -94,14 +50,53 @@ samples =[
     "name":"2 vertical",
     "data": [
         {"day":1, "hour":1, "value":1},
-        {"day":2, "hour":2, "value":2}
+        {"day":1, "hour":2, "value":20}
     ]
   },
   {
     "name":"2 horizontal",
     "data": [
         {"day":1, "hour":1, "value":1},
-        {"day":1, "hour":2, "value":2}
+        {"day":2, "hour":1, "value":20}
+    ]
+  },
+  {
+    "name":"2x2 grid",
+    "data": [
+        {"day":1, "hour":1, "value":1},
+        {"day":1, "hour":2, "value":20},
+        {"day":2, "hour":1, "value":20},
+        {"day":2, "hour":2, "value":1}
+    ]
+  },
+  {
+    "name":"3 vertical",
+    "data": [
+        {"day":1, "hour":1, "value":1},
+        {"day":1, "hour":2, "value":20},
+        {"day":1, "hour":3, "value":30}
+    ]
+  },
+  {
+    "name":"3 horizontal",
+    "data": [
+        {"day":1, "hour":1, "value":1},
+        {"day":2, "hour":1, "value":20},
+        {"day":3, "hour":1, "value":30}
+    ]
+  },
+  {
+    "name":"3x3 grid",
+    "data": [
+        {"day":1, "hour":1, "value":1},
+        {"day":1, "hour":2, "value":20},
+        {"day":1, "hour":3, "value":30},
+        {"day":2, "hour":1, "value":1},
+        {"day":2, "hour":2, "value":20},
+        {"day":2, "hour":3, "value":30},
+        {"day":3, "hour":1, "value":1},
+        {"day":3, "hour":2, "value":20},
+        {"day":3, "hour":3, "value":30}
     ]
   },
   {
@@ -140,6 +135,26 @@ samples =[
       {"day":1, "hour":7, "value":7},
       {"day":1, "hour":8, "value":8},
       {"day":1, "hour":9, "value":9}
+    ]
+  },
+  {
+  "name":"random",
+    "data": [
+      {"day":1, "hour":1, "value":10},
+      {"day":1, "hour":10, "value":24},
+      {"day":1, "hour":11, "value":3},
+      {"day":2, "hour":4, "value":4},
+      {"day":2, "hour":5, "value":30},
+      {"day":3, "hour":3, "value":25},
+      {"day":4, "hour":5, "value":5},
+      {"day":5, "hour":1, "value":4},
+      {"day":5, "hour":3, "value":17},
+      {"day":5, "hour":5, "value":8},
+      {"day":6, "hour":5, "value":45},
+      {"day":7, "hour":3, "value":6},
+      {"day":7, "hour":7, "value":39},
+      {"day":7, "hour":8, "value":28},
+      {"day":7, "hour":9, "value":29}
     ]
   }
 ]

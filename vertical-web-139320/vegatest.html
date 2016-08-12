@@ -257,7 +257,8 @@ var vlSpec =
 
 var daysOfWeek = [ "Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 
-// Heat map with same values as d3js visualization
+// I created this spec based on the heat map example in vega examples folder
+// It somehow squeezes rectangles together
 var vlSpec = 
 {
   "width": 800,
@@ -358,8 +359,129 @@ var vlSpec =
   ]
 }
 
+// This spec 2 is from answer here
+// https://github.com/vega/vega/issues/154
+// The scales don't display correctly
+var vlSpec2 = {
+  "width": 500,
+  "height": 200,
+  "padding": "strict",
+  "data": [
+    {
+      "name": "dayhourvalue",
+      "values": {{cleanedData|safe}}
+    }
+  ],
+  "scales": [
+    {
+      "name": "hour_horizontal_scale",
+      "type": "ordinal",
+      "range": "width",
+      "round": false,
+      "domain": {
+        "data": "dayhourvalue",
+        "field": "hour"
+      }
+    },
+    {
+      "name": "day_vertical_scale",
+      "type": "ordinal",
+      "range": "height",
+      "round": false,
+      "domain": {
+        "data": "dayhourvalue",
+        "field": "day"
+      }
+    },
+    {
+      "name": "value_color_scale",
+      "type": "quantile",
+      "range": ["#ffffd9","#edf8b1","#c7e9b4","#7fcdbb","#41b6c4","#1d91c0","#225ea8","#253494","#081d58"],
+      "domain": [0, 8, 70]
+    }
+  ],
+  "legends": [
+    {
+      "fill": "value_color_scale",
+      "values": [ 0, 2, 4, 5, 7, 15, 29, 42, 56 ],
+      "orient": "left"
+    }
+  ],
+  "axes": [
+    {
+      "type": "x",
+      "scale": "hour_horizontal_scale",
+      "orient": "top",
+      "values": [ "1a", "2a", "3a", "4a", "5a", "6a", "7a", "8a", "9a", "10a", "11a", "12a", "1p", "2p", "3p", "4p", "5p", "6p", "7p", "8p", "9p", "10p", "11p", "12p" ],
+      "properties": {
+        "axis": { "stroke": { "vaue": "none" } },
+        "ticks": { "stroke": { "value": "none" } },
+        "labels": { "font": { "value": "Consolas, courier" }, "fontSize": { "value": 9 }, "fill": { "value": "#aaa" } }
+      }
+    },
+    {
+      "type": "y",
+      "scale": "day_vertical_scale",
+      "orient": "left",
+      "values": [ "Mo", "Tu", "We", "Th", "Fr", "Sa", "Su" ],
+      "properties": {
+        "axis": { "stroke": { "vaue": "none" } },
+        "ticks": { "stroke": { "value": "none" } },
+        "labels": { "font": { "value": "Consolas, courier" }, "fontSize": { "value": 9 }, "fill": { "value": "#aaa" } }
+      }
+    }
+  ],
+  "marks": [
+    {
+      "type": "rect",
+      "from": {
+        "data": "dayhourvalue"
+      },
+      "properties": {
+        "hover": {
+          "stroke": {
+            "value": "red"
+          }
+        },
+        "update": {
+          "x": {
+            "scale": "hour_horizontal_scale",
+            "field": "hour",
+            "offset": 1
+          },
+          "width": {
+            "scale": "hour_horizontal_scale",
+            "band": true,
+            "offset": -2
+          },
+          "y": {
+            "scale": "day_vertical_scale",
+            "field": "day",
+            "offset": 1
+          },
+          "height": {
+            "scale": "day_vertical_scale",
+            "band": true,
+            "offset": -2
+          },
+          "fill": {
+            "scale": "value_color_scale",
+            "field": "value"
+          },
+          "stroke": {
+            "value": "none"
+          },
+          "opacity": {
+            "value": 1
+          }
+        }
+      }
+    }
+  ]
+}
+
   // Embed the visualization in the container with id `vis`
-  vg.embed("#vis", vlSpec, function(error, result) {
+  vg.embed("#vis", vlSpec2, function(error, result) {
     // Callback receiving the View instance and parsed Vega spec
     // result.view is the View, which resides under the '#vis' element
   });
