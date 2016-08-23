@@ -3,27 +3,82 @@
 <html>
   <head>
     <style>
+    #status{
+        color: #0000ff;
+        font: 32px times new roman;
+      }
     </style>
     <title>Video Testing</title>
     <script>
-      
     </script>
   </head>
   <body>
-    <script id="container"></script>
-    <input type="text" id="containerId" value="GTM-MK2GL6"></input>
-    <input type="button" value="load preview" onclick="containerPreview()"></input>
-    <div id="cat" style="width:500px;">
-    <script src="http://content.jwplatform.com/players/3WsZNDQ8-7pVCTwdI.js"></script>
-    </div>
+    <div align="center">
 
-    <div id="vimeoplayer" style="width:500px">
+
+
+    <div id="playerjw" style="width:500px;">
+      <script src="http://content.jwplatform.com/players/3WsZNDQ8-7pVCTwdI.js"></script>
+    </div>
+    <script>
+
+    </script>
+
+    <div id="vimeoplayer" style="width:500px; height:200px;">
+      <iframe src="https://player.vimeo.com/video/161138986" width="100%" height="100%" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
     </div>
 
     <div id="youtube" style="width:500px">
+      <IFRAME src="https://www.youtube.com/embed/SqvuFjACM_Y?enablejsa" allowfullscreen="allowfullscreen" frameborder="0" height="315" width="560"></IFRAME>
     </div>
 
-  <script>
+    <script id="container"></script>
+    <input type="text" id="containerId" value="GTM-MK2GL6"></input>
+    <input type="button" value="load preview" onclick="containerPreview()"></input>
+
+    <br/>
+    <div id="status">
+    </div>
+
+    </div>
+  
+    <script>
+    /*
+
+      // Listeners for jwplayer
+      jwplayer().on('volume', function(e) {
+        document.getElementById("status").innerHTML = "Volume is changed to: "+ e.volume;
+        console.log("volume changed");
+      });
+
+      jwplayer().on('play', function(){
+        document.getElementById("status").innerHTML = "JW player play";
+        console.log("playing");
+      });
+
+      jwplayer().on('pause', function(){
+        document.getElementById("status").innerHTML = "JW player pause";
+      });
+
+      jwplayer().on('complete', function(){
+        document.getElementById("status").innerHTML = "JW player complete";
+      });
+
+*/
+
+
+
+      // Listeners for Vimeo
+
+
+
+     
+      //console.log(window.onYouTubeIframeAPIReady);
+
+
+
+
+  // This script loads a preview container
   var containerPreview = function(){
 
      //warning probably some sort of weird closure thing here
@@ -44,7 +99,6 @@
   f.parentNode.insertBefore(j, f);
 })(window, document, 'script', 'dataLayer', customId.value);
   };
-
   </script>
 
   </body>

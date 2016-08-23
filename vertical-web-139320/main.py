@@ -224,6 +224,11 @@ class VideoTesting(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('videotesting.html')
         self.response.write(template.render())
 
+class CookieTesting(webapp2.RequestHandler):
+    def get(self):
+        template = JINJA_ENVIRONMENT.get_template('cookietest.html')
+        self.response.write(template.render())
+
 app = webapp2.WSGIApplication([
     ('/', InputHandler),
     ('/results', MainHandler),
@@ -231,5 +236,6 @@ app = webapp2.WSGIApplication([
     ('/vegatest', VegaTest),
     ('/sidebyside', SideBySide),
     ('/videotesting', VideoTesting),
+    ('/cookietesting', CookieTesting),
     (decorator.callback_path, decorator.callback_handler())
 ], debug=True)
